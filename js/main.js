@@ -16,72 +16,84 @@ getRandomFromRangeInclusive();
 
 const checkStringLength = (string, maxStringLength) => string.length <= maxStringLength;
 checkStringLength ();
-
-//генерация данных
-//от кекса
+//генерация от кекса
 const getRandomPositiveInteger = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
+const messages = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
-const getUniqueNumbers = function (numberOfDigits) {
-  const arrayOfUniques = [];
-  const getNumber = () => {
-    const number = getRandomPositiveInteger(1, numberOfDigits);
-    if (arrayOfUniques.includes(number)){
+const names = ['Артем', 'Михаил', 'Зоя','Анна', 'Борис', 'Татьяна', 'Роман', 'Anna', 'Lucas', 'Дмитрий', 'Люси', 'Ванда', 'Max'];
+
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+const maxPhotoQuantity = 25;
+
+//создает уникальный массив чисел
+const getUniqueId = (numberOfDigits) => {
+  const numbersUniqueId = [];
+  const getNumber = ()=>{
+    const number = getRandomPositiveInteger(1,numberOfDigits);
+    if (numbersUniqueId.includes(number)){
       getNumber();
     } else {
-      arrayOfUniques.push(number);
+      numbersUniqueId.push(number);
     }
   };
   for (let i = 0; i < numberOfDigits; i++){
     getNumber();
   }
-  return arrayOfUniques;
+  return numbersUniqueId;
 };
+const numbersUnique = getUniqueId(500);//взяла с запасом
 
-const id = [1, 15, 6, 4, 5, 6, 7, 8, 9, 25, 11, 12, 13, 14, 2, 16, 17, 18, 19, 20, 21, 22, 23, 24, 10];
-const url = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
-const message = ['В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.'];
-
-const names = ['Anna', 'Lucas', 'Дмитрий', 'Люси', 'Ванда', 'Max'];
-
-const createObject = () => {
-  const getUniqueIdObject = () => {
-    id.push (id.shift());
-    return id.shift();
+const createPhotoDescription = (id)=> {
+  const createComment = () =>
+    ({id: numbersUnique[Math.floor(Math.random()*numbersUnique.length)],
+      avatar: `img/avatar-${ getRandomPositiveInteger(1, 6)  }.svg`,
+      message: getRandomArrayElement(messages),
+      name: getRandomArrayElement(names)
+    });
+  //создание массива комментариев
+  const makeComments=()=>{
+    const commentsArray = [];
+    for (let i=0; i<=messages.length-1; i++){
+      commentsArray.push(createComment(i));
+    }
+    return commentsArray;
   };
-  const getUniqueUrl = () => {
-    url.push(url.shift());
-    return url.shift();
+  const comments = makeComments();
+  //комменты для каждой фото
+  const makeCommentsForPhoto = () => {
+    const photosComments = [];
+    const commentCount = getRandomPositiveInteger(1,4);
+    for(let i =0; i<=commentCount; i++) {
+      photosComments.push(getRandomArrayElement(comments));
+    }
+    return photosComments;
   };
-  const getLikes = getRandomPositiveInteger(15, 200);
-  const quantityOfComments  = getRandomPositiveInteger(0,10);
-  const getUniqueCommentIdNumbersArray = getUniqueNumbers(250);
-  const getUniqueCommentsId =() => getUniqueCommentIdNumbersArray.pop();
-  const getAvatar = getRandomPositiveInteger(1, 6);
-  const randomMessageIndex = getRandomPositiveInteger(0, message.length - 1);
-  const randomNamesIndex = getRandomPositiveInteger(0, names.length - 1);
-  const createComments = function() {
-    return {
-      id: getUniqueCommentsId(),
-      avatar: `img/avatar-${ getAvatar  }.svg`,
-      message: message[randomMessageIndex],
-      name: names[randomNamesIndex]
-    };
-  };
-
-  const similarComments = Array.from({length:quantityOfComments}, createComments);
   return {
-    id: getUniqueIdObject(),
-    url: `photos/${  getUniqueUrl()  }.jpg`,
+    id,
+    url: `photos/${ id }.jpg`,
     description: 'Просто класс!',
-    likes: getLikes,
-    comments: similarComments
+    likes: getRandomPositiveInteger(15, 200),
+    comments: makeCommentsForPhoto()
   };
 };
 
-const similarObjects = Array.from({length: 25}, createObject);
-console.log(similarObjects);
+const createPhotos = (count) => {
+  const photosArray = [];
+  for( let i=1; i<=count; i++){
+    photosArray.push(createPhotoDescription(i));
+  }
+  return photosArray;
+};
+
+const photos = createPhotos(maxPhotoQuantity);
+console.log(photos);
