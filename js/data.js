@@ -13,13 +13,15 @@ const MAX_PHOTO_QUANTITY = 25;
 
 const NUMBERS_UNIQUE = getUniqueId(500);//взяла с запасом
 
-const createPhotoDescription = (id)=> {
-  const createComment = () =>
-    ({id: NUMBERS_UNIQUE.shift(),
-      avatar: `img/avatar-${ getRandomPositiveInteger(1, 6)  }.svg`,
-      message: getRandomArrayElement(MESSAGES),
-      name: getRandomArrayElement(NAMES)
-    });
+const createComment = () =>
+  ({id: NUMBERS_UNIQUE.shift(),
+    avatar: `img/avatar-${ getRandomPositiveInteger(1, 6)  }.svg`,
+    message: getRandomArrayElement(MESSAGES),
+    name: getRandomArrayElement(NAMES)
+  });
+//комменты для каждой фото
+
+
   //создание массива комментариев
   const makeComments=()=>{
     const commentsArray = [];
@@ -28,24 +30,24 @@ const createPhotoDescription = (id)=> {
     }
     return commentsArray;
   };
-  const COMMENTS = makeComments();
-  //комменты для каждой фото
   const makeCommentsForPhoto = () => {
-    const photosComments = [];
-    const commentCount = getRandomPositiveInteger(1,2);
-    for(let i =0; i<commentCount; i++) {
-      photosComments.push(getRandomArrayElement(COMMENTS));
-    }
-    return photosComments;
-  };
-  return {
-    id,
-    url: `photos/${ id }.jpg`,
-    description: 'Просто класс!',
-    likes: getRandomPositiveInteger(15, 200),
-    comments: makeCommentsForPhoto()
-  };
+  const COMMENTS = makeComments();
+  const photosComments = [];
+  const commentCount = getRandomPositiveInteger(1,2);
+  for(let i =0; i<commentCount; i++) {
+    photosComments.push(getRandomArrayElement(COMMENTS));
+  }
+  return photosComments;
 };
+console.log(makeCommentsForPhoto())
+//
+const createPhotoDescription = (id)=> ({
+  id,
+  url: `photos/${ id }.jpg`,
+  description: 'Просто класс!',
+  likes: getRandomPositiveInteger(15, 200),
+  comments: makeCommentsForPhoto()
+});
 
 const createPhotos = (count) => {
   const photosArray = [];
@@ -59,4 +61,5 @@ const makePhotos = () => createPhotos(MAX_PHOTO_QUANTITY);
 makePhotos();
 
 export {makePhotos};
-
+export {createComment};
+export{makeCommentsForPhoto};
