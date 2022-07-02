@@ -34,11 +34,11 @@ const createCommentElements = (items) => {
 };
 
 // наполняетDOM-элемент 'Полноэкранный показ изображения' данными из pictures
-const fillPreview =()=> {
-  previewImage.src = url;
-  previewCaption.textContent = description;
-  previewLikes.textContent = likes;
-  // const comments = photo.comments.slice();
+const fillPreview =(photo)=> {
+  previewImage.src = photo.url;
+  previewCaption.textContent = photo.description;
+  previewLikes.textContent = photo.likes;
+  const comments = photo.comments.slice();
   commentsCount.textContent = comments.length;
   createCommentElements(commentsArray);
   return previewFragment;
@@ -58,27 +58,18 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 //открывает полноразмерное изображение
-const openPreview = (evt) => {
-  evt.preventDefault();
+const openPreview = () => {
   preview.classList.remove('hidden');
   body.classList.add('.modal-open');
   commentsLoaderButton.classList.add('hidden');
   commentCounter.classList.add('hidden');
-  fillPreview();
+  fillPreview(photo);
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
-
-//открывает полноразмерное изображение
-pictureElementClose.addEventListener('click', ()=> {
-  openPreview();
-});
-
-pictureElementClose.addEventListener('click', () =>{
-  closePreview();
-});
 
 previewCloseButton.addEventListener ('click', () => {
   closePreview();
 });
 
+export {openPreview, fillPreview};

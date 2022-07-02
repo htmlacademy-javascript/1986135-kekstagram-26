@@ -9,6 +9,8 @@ const MESSAGES = [
 
 const NAMES = ['Артем', 'Михаил', 'Зоя','Анна', 'Борис', 'Татьяна', 'Роман', 'Anna', 'Lucas', 'Дмитрий', 'Люси', 'Ванда', 'Max'];
 
+// const DESCRIPTION = [];
+
 const MAX_PHOTO_QUANTITY = 25;
 
 const NUMBERS_UNIQUE = getUniqueId(500);//взяла с запасом
