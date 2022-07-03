@@ -1,15 +1,16 @@
 import { makePhotos } from './data.js';
 import {openPreview} from './preview.js';
+// import './preview.js';
 
 const pictures = document.querySelector('.pictures');
-const randomPictureTemplate = document.querySelector('#picture').content;
+const randomPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
 const groupPictures = makePhotos();
-// console.log(groupPictures)
+// console.log(groupPictures[0].description);
 const groupPicturesFragment = document.createDocumentFragment();
 
 groupPictures.forEach((photo) => {
-  const {comments, likes, url} = photo;
+  const {comments, likes, url, description} = photo;
   const pictureElement = randomPictureTemplate.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = url;
   pictureElement.querySelector('.picture__likes').textContent = likes;

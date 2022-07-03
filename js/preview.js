@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { makeCommentsForPhoto } from './data.js';
+import { makeCommentsForPhoto} from './data.js';
 
 const body = document.querySelector('body');
 const preview = document.querySelector('.big-picture');
@@ -34,12 +34,13 @@ const createCommentElements = (items) => {
 };
 
 // наполняетDOM-элемент 'Полноэкранный показ изображения' данными из pictures
+
 const fillPreview =(photo)=> {
   previewImage.src = photo.url;
-  previewCaption.textContent = photo.description;
   previewLikes.textContent = photo.likes;
-  const comments = photo.comments.slice();
-  commentsCount.textContent = comments.length;
+  commentsCount.textContent = photo.comments.length;
+  previewCaption.innerHTML = '';
+  previewCaption.textContent = photo.description;
   createCommentElements(commentsArray);
   return previewFragment;
 };
@@ -58,18 +59,18 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 //открывает полноразмерное изображение
-const openPreview = () => {
+const openPreview = (photo) => {
   preview.classList.remove('hidden');
-  body.classList.add('.modal-open');
+  body.classList.add('modal-open');
   commentsLoaderButton.classList.add('hidden');
   commentCounter.classList.add('hidden');
   fillPreview(photo);
 
-  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.addEventListener('keydown', onPopupEscKeydown);
 };
 
 previewCloseButton.addEventListener ('click', () => {
   closePreview();
 });
 
-export {openPreview, fillPreview};
+export {openPreview};
