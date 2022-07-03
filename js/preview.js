@@ -49,7 +49,12 @@ const fillPreview =(photo)=> {
 const closePreview = () => {
   preview.classList.add('hidden');
   body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.removeEventListener('keydown', (evt) => {
+    if(isEscapeKey(evt)) {
+      evt.preventDefault();
+      closePreview();
+    }
+  });
 };
 
 const onPopupEscKeydown = (evt) => {

@@ -40,8 +40,7 @@ const makeCommentsForPhoto = () => {
   }
   return photosComments;
 };
-console.log(makeCommentsForPhoto());
-//
+
 const createPhotoDescription = (id)=> ({
   id,
   url: `photos/${ id }.jpg`,

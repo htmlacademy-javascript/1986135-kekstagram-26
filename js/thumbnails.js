@@ -10,7 +10,7 @@ const groupPictures = makePhotos();
 const groupPicturesFragment = document.createDocumentFragment();
 
 groupPictures.forEach((photo) => {
-  const {comments, likes, url, description} = photo;
+  const {comments, likes, url} = photo;
   const pictureElement = randomPictureTemplate.cloneNode(true);
   pictureElement.querySelector('.picture__img').src = url;
   pictureElement.querySelector('.picture__likes').textContent = likes;
