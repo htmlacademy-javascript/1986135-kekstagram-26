@@ -1,9 +1,7 @@
 import { isEscapeKey } from './util.js';
-import { makeCommentsForPhoto} from './data.js';
 
 const body = document.querySelector('body');
 const preview = document.querySelector('.big-picture');
-const previewFragment = preview.querySelector('.big-picture__preview');
 const previewImage = preview.querySelector('.big-picture__img').querySelector('img');
 const commentsCountBlock = preview.querySelector('.social__comment-count');
 const commentsCount = commentsCountBlock.querySelector('.comments-count');
@@ -15,54 +13,43 @@ const commentsLoaderButton = preview.querySelector('.comments-loader');
 const commentCounter = preview.querySelector('.social__comment-count');
 const previewCloseButton = preview.querySelector('.cancel');
 
-//функция для создания элемента DOM
-
-const commentsArray = makeCommentsForPhoto();
-const createCommentElements = (items) => {
-  const comments = [];
-  previewComments.innerHTML = '';
-  for (let i=0; i < items.length; i++) {
-    const item = items[i];
-    const comment = commentTemplate.cloneNode(true);
-    comment.querySelector('img').src = item.avatar;
-    comment.querySelector('img').alt = item.name;
-    comment.querySelector('.social__text').textContent = item.message;
-    comments.push(comment);
-  }
-  previewComments.append(...comments);
-  return previewComments;
-};
-
 // наполняетDOM-элемент 'Полноэкранный показ изображения' данными из pictures
 
 const fillPreview =(photo)=> {
   previewImage.src = photo.url;
   previewLikes.textContent = photo.likes;
   commentsCount.textContent = photo.comments.length;
-  previewCaption.innerHTML = '';
   previewCaption.textContent = photo.description;
-  createCommentElements(commentsArray);
-  return previewFragment;
+  const comments = photo.comments;
+  comments.forEach((comment) => {
+    previewComments.innerHTML = '';
+    for (let i = 0; i< comments.length; i++) {
+      comment = comments[i];
+      const commentElement = commentTemplate.cloneNode(true);
+      commentElement.querySelector('img').src = comment.avatar;
+      commentElement.querySelector('img').alt = comment.name;
+      commentElement.querySelector('.social__text').textContent = comment.message;
+      previewComments.append(commentElement);
+
+    }
+  });
 };
 
 //закрывает полноразмерное изображение
 const closePreview = () => {
   preview.classList.add('hidden');
   body.classList.remove('modal-open');
-  document.removeEventListener('keydown', (evt) => {
-    if(isEscapeKey(evt)) {
-      evt.preventDefault();
-      closePreview();
-    }
-  });
+  previewCloseButton.removeEventListener('click', closePreview);
+  document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
-const onPopupEscKeydown = (evt) => {
+function onPopupEscKeydown (evt) {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
     closePreview();
   }
-};
+}
+
 //открывает полноразмерное изображение
 const openPreview = (photo) => {
   preview.classList.remove('hidden');
@@ -70,12 +57,8 @@ const openPreview = (photo) => {
   commentsLoaderButton.classList.add('hidden');
   commentCounter.classList.add('hidden');
   fillPreview(photo);
-
+  previewCloseButton.addEventListener('click', closePreview);
   document.addEventListener('keydown', onPopupEscKeydown);
 };
-
-previewCloseButton.addEventListener ('click', () => {
-  closePreview();
-});
 
 export {openPreview};
