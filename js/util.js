@@ -40,4 +40,6 @@ const getUniqueId = (numberOfDigits) => {
 //случайный элемент из массива
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
-export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId};
+const isEscapeKey = (evt) =>  evt.key === 'Escape';
+
+export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey};
