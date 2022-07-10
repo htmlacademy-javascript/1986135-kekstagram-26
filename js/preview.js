@@ -20,9 +20,9 @@ const fillPreview =(photo)=> {
   previewLikes.textContent = photo.likes;
   commentsCount.textContent = photo.comments.length;
   previewCaption.textContent = photo.description;
+  previewComments.innerHTML = '';
   photo.comments.forEach((comments)=> {
     const {avatar, name, message} = comments;
-    previewComments.innerHTML = '';
     const commentElement = commentTemplate.cloneNode(true);
     commentElement.querySelector('img').src = avatar;
     commentElement.querySelector('img').alt = name;
@@ -33,15 +33,17 @@ const fillPreview =(photo)=> {
 
 
 //закрывает полноразмерное изображение
-const onPreviewClose = ()=>{
-  const closePreview = () => {
-    preview.classList.add('hidden');
-    body.classList.remove('modal-open');
-    previewCloseButton.removeEventListener('click', onPreviewClose);
-    document.removeEventListener('keydown', onPopupEscKeydown);
-  };
-  return closePreview();
+
+const closePreview = () => {
+  preview.classList.add('hidden');
+  body.classList.remove('modal-open');
+  previewCloseButton.removeEventListener('click', onPreviewClose);
+  document.removeEventListener('keydown', onPopupEscKeydown);
 };
+
+function onPreviewClose () {
+  closePreview();
+}
 
 function onPopupEscKeydown (evt) {
   if(IS_ESCAPE_KEY(evt)) {
