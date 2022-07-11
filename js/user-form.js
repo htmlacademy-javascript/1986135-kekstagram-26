@@ -39,7 +39,7 @@ function onPopupEscKeydown (evt) {
   }
 }
 
-uploadFileInput.addEventListener('change', (evt)=> {
+uploadFileInput.addEventListener('change', ()=> {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   uploadCancelButton.addEventListener('click', onUploadImgClose);
@@ -51,45 +51,24 @@ const pristine = new Pristine(uploadForm, {
   errorTextParent: 'img-upload__field-wrapper'
 }, false);
 
-const unifyHashtags = (value) => value.trim().toLowerCase().split(' ');
+const unifyHashtags = (value) => {
+  if (!value.length) {
+    return [];
+  }
+  return value.trim().toLowerCase().split(' ');
+};
 
 const isArrayUnique = (array)=> new Set(array).size === array.length;
 
 const validateDescription = (value) => value.length <= 140;
 
-pristine.addValidator(hashTags, (value)=> {
-  if(!value.length) {
-    return true;
-  }
-  unifyHashtags(value).every((elem) => RE.test(elem));
-}, 'Хэштег может состоять только из букв и цифр без пробелов, специальных символов и знаков пунктуации. Хэштеги должны разделяться пробелами');
-pristine.addValidator(hashTags, (value) => {
-  if(!value.length) {
-    return true;
-  }
-  unifyHashtags(value).every((elem) => elem.length >= HASHTAG.MIN_SIZE);
-}, 'Минимальное количество символов - 2, максимальное - 20, включая #');
-pristine.addValidator(hashTags, (value) => {
-  if(!value.length) {
-    return true;
-  }
-  unifyHashtags(value).every((elem) => elem.length <= HASHTAG.MAX_SIZE);
-}, 'Максимальное количество символов - 20, включая #');
-pristine.addValidator(hashTags, (value)=> {
-  if(!value.length) {
-    return true;
-  } else if(unifyHashtags(value).length <=  HASHTAG.AMOUNT){
-    return true;
-  }
-  return false;
-}, 'Можно добавить не более 5 хэштегов');
+pristine.addValidator(hashTags, (value)=> unifyHashtags(value).every((elem) => elem.startsWith('#')), 'Хэштег должен начинаться с решетки#');
+pristine.addValidator(hashTags, (value)=> unifyHashtags(value).every((elem) => RE.test(elem)), 'Хэштег может состоять только из букв и цифр без пробелов, специальных символов и знаков пунктуации. Хэштеги должны разделяться пробелами');
+pristine.addValidator(hashTags, (value) => unifyHashtags(value).every((elem) => elem.length >= HASHTAG.MIN_SIZE), 'Минимальное количество символов - 2, максимальное - 20, включая #');
+pristine.addValidator(hashTags, (value) =>  unifyHashtags(value).every((elem) => elem.length <= HASHTAG.MAX_SIZE), 'Максимальное количество символов - 20, включая #');
+pristine.addValidator(hashTags, (value)=> unifyHashtags(value).length <=  HASHTAG.AMOUNT, 'Можно добавить не более 5 хэштегов');
 
-pristine.addValidator(hashTags, (value)=> {
-  if(!value.length) {
-    return true;
-  }
-  isArrayUnique(unifyHashtags(value));
-}, 'Хэштеги не должны повторяться, #ХэшТег и #хэштег считаются одним и тем же тегом');
+pristine.addValidator(hashTags, (value)=>  isArrayUnique(unifyHashtags(value)), 'Хэштеги не должны повторяться, #ХэшТег и #хэштег считаются одним и тем же тегом');
 pristine.addValidator(textDescription, validateDescription, 'Длина комментария не может составлять больше 140 символов');
 
 const onUploadFormSubnmit = (evt)=> {
@@ -99,5 +78,3 @@ const onUploadFormSubnmit = (evt)=> {
   }
 };
 uploadForm.addEventListener('submit', onUploadFormSubnmit);
-
-
