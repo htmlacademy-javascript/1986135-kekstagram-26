@@ -1,4 +1,4 @@
-import { isEscapeKey } from './util.js';
+import { IS_ESCAPE_KEY } from './util.js';
 
 const body = document.querySelector('body');
 const preview = document.querySelector('.big-picture');
@@ -20,33 +20,35 @@ const fillPreview =(photo)=> {
   previewLikes.textContent = photo.likes;
   commentsCount.textContent = photo.comments.length;
   previewCaption.textContent = photo.description;
-  const comments = photo.comments;
-  comments.forEach((comment) => {
-    previewComments.innerHTML = '';
-    for (let i = 0; i< comments.length; i++) {
-      comment = comments[i];
-      const commentElement = commentTemplate.cloneNode(true);
-      commentElement.querySelector('img').src = comment.avatar;
-      commentElement.querySelector('img').alt = comment.name;
-      commentElement.querySelector('.social__text').textContent = comment.message;
-      previewComments.append(commentElement);
-
-    }
+  previewComments.innerHTML = '';
+  photo.comments.forEach((comments)=> {
+    const {avatar, name, message} = comments;
+    const commentElement = commentTemplate.cloneNode(true);
+    commentElement.querySelector('img').src = avatar;
+    commentElement.querySelector('img').alt = name;
+    commentElement.querySelector('.social__text').textContent = message;
+    previewComments.append(commentElement);
   });
 };
 
+
 //закрывает полноразмерное изображение
+
 const closePreview = () => {
   preview.classList.add('hidden');
   body.classList.remove('modal-open');
-  previewCloseButton.removeEventListener('click', closePreview);
+  previewCloseButton.removeEventListener('click', onPreviewClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
 
+function onPreviewClose () {
+  closePreview();
+}
+
 function onPopupEscKeydown (evt) {
-  if(isEscapeKey(evt)) {
+  if(IS_ESCAPE_KEY(evt)) {
     evt.preventDefault();
-    closePreview();
+    onPreviewClose();
   }
 }
 
@@ -57,7 +59,7 @@ const openPreview = (photo) => {
   commentsLoaderButton.classList.add('hidden');
   commentCounter.classList.add('hidden');
   fillPreview(photo);
-  previewCloseButton.addEventListener('click', closePreview);
+  previewCloseButton.addEventListener('click', onPreviewClose);
   document.addEventListener('keydown', onPopupEscKeydown);
 };
 
