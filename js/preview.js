@@ -1,4 +1,4 @@
-import { IS_ESCAPE_KEY } from './util.js';
+import { isEscapeKey } from './util.js';
 
 const body = document.querySelector('body');
 const preview = document.querySelector('.big-picture');
@@ -46,7 +46,7 @@ function onPreviewClose () {
 }
 
 function onPopupEscKeydown (evt) {
-  if(IS_ESCAPE_KEY(evt)) {
+  if(isEscapeKey(evt)) {
     evt.preventDefault();
     onPreviewClose();
   }

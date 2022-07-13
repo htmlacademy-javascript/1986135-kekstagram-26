@@ -1,4 +1,4 @@
-import { IS_ESCAPE_KEY } from './util.js';
+import { isEscapeKey } from './util.js';
 
 const RE = /^#[a-zA-ZА-Яа-яЁё0-9]{1,19}$/;
 const HASHTAG = {
@@ -32,7 +32,7 @@ function onPopupEscKeydown (evt) {
   } else if(textDescription === document.activeElement) {
     evt.stopPropagation();
   } else {
-    if(IS_ESCAPE_KEY(evt)){
+    if(isEscapeKey(evt)){
       evt.preventDefault();
       onUploadImgClose();
     }
