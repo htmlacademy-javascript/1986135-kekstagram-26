@@ -9,7 +9,7 @@ const scaleValue = scaleContainer.querySelector('.scale__control--value');
 const imagePreview = document.querySelector('.img-upload__preview').querySelector('img');
 
 const setScaleValue = (currentValue) => {
-  const newValue = currentValue /MAX_SCALE_VALUE;
+  const newValue = currentValue /100;
   imagePreview.style.transform = `scale(${newValue })`;
 };
 
@@ -31,15 +31,20 @@ const increaseScale = () => {
 
 const onButtonScaleDecrease = () => {
   const currentValue = decreaseScale();
-  scaleValue.value = `${currentValue  }%`;
+  scaleValue.setAttribute('value',`${currentValue  }%`);
   setScaleValue(currentValue);
 };
 
 const onButtonScaleIncrease = () => {
   const currentValue = increaseScale();
-  scaleValue.value = `${currentValue  }%`;
+  scaleValue.setAttribute('value',`${currentValue  }%`);
   setScaleValue(currentValue);
 };
 
-scaleControlSmaller.addEventListener('click', onButtonScaleDecrease);
-scaleControlBigger.addEventListener('click', onButtonScaleIncrease);
+const resetScale = ()=> {
+  imagePreview.style.transform = '';
+  scaleValue.setAttribute('value', `${MAX_SCALE_VALUE}%`);
+};
+
+
+export {resetScale, scaleControlSmaller, scaleControlBigger, onButtonScaleDecrease, onButtonScaleIncrease};
