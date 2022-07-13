@@ -93,7 +93,7 @@ const updateEffectSetting =({sliderConfig, filter, effectMeasure}, startValue)=>
 const resetEffectSetting =() => {
   imagePreview.classList = '';
   imagePreview.style.filter = '';
-  updateEffectSetting(EFFECTS_CONFIG.NONE, START_VALUE);
+  updateEffectSetting(EFFECTS_CONFIG['NONE'], START_VALUE);
 };
 
 noUiSlider.create(sliderElement, {
@@ -119,22 +119,22 @@ const onChangeEffectsList =(evt)=> {
     sliderContainer.classList.add('hidden');
   } else if(target && target.value === 'chrome'){
     setEffectClass('effects__preview--chrome');
-    updateEffectSetting(EFFECTS_CONFIG.CHROME, START_VALUE);
+    updateEffectSetting(EFFECTS_CONFIG['CHROME'], START_VALUE);
     sliderContainer.classList.remove('hidden');
   } else if(target && target.value === 'sepia'){
     setEffectClass('effects__preview--sepia');
-    updateEffectSetting(EFFECTS_CONFIG.SEPIA, START_VALUE);
+    updateEffectSetting(EFFECTS_CONFIG['SEPIA'], START_VALUE);
     sliderContainer.classList.remove('hidden');
   } else if (target && target.value === 'marvin'){
     setEffectClass('effects__preview--marvin');
-    updateEffectSetting(EFFECTS_CONFIG.MARVIN, START_VALUE);
+    updateEffectSetting(EFFECTS_CONFIG['MARVIN'], START_VALUE);
   } else if (target && target.value === 'phobos'){
     setEffectClass('effects__preview--phobos');
-    updateEffectSetting(EFFECTS_CONFIG.PHOBOS, START_VALUE);
+    updateEffectSetting(EFFECTS_CONFIG['PHOBOS'], START_VALUE);
     sliderContainer.classList.remove('hidden');
   } else if (target && target.value === 'heat'){
     setEffectClass('effects__preview--heat');
-    updateEffectSetting(EFFECTS_CONFIG.HEAT, START_VALUE);
+    updateEffectSetting(EFFECTS_CONFIG['HEAT'], START_VALUE);
     sliderContainer.classList.remove('hidden');
   }
 };
