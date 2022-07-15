@@ -1,6 +1,6 @@
 import { isEscapeKey } from './util.js';
-import { scaleControlSmaller, scaleControlBigger, onButtonScaleDecrease, onButtonScaleIncrease, resetScale } from './scale.js';
-import {resetEffectSetting, effectsList, onChangeEffectsList} from './slider-effects.js';
+import { resetScale, changeScale, removeScale } from './scale.js';
+import {setupEffects, destroyEffects} from './slider-effects.js';
 
 const RE = /^#[a-zA-ZА-Яа-яЁё0-9]{1,19}$/;
 const HASHTAG = {
@@ -23,10 +23,8 @@ const uploadImageClose = ()=> {
   document.removeEventListener('keydown', onPopupEscKeydown);
   uploadForm.reset();
   resetScale();
-  scaleControlSmaller.removeEventListener('click', onButtonScaleDecrease);
-  scaleControlBigger.removeEventListener('click', onButtonScaleIncrease);
-  resetEffectSetting();
-  effectsList.removeEventListener('change', onChangeEffectsList);
+  removeScale();
+  destroyEffects();
 };
 
 function onUploadImgClose () {
@@ -51,8 +49,8 @@ uploadFileInput.addEventListener('change', ()=> {
   body.classList.add('modal-open');
   uploadCancelButton.addEventListener('click', onUploadImgClose);
   document.addEventListener('keydown', onPopupEscKeydown);
-  scaleControlSmaller.addEventListener('click', onButtonScaleDecrease);
-  scaleControlBigger.addEventListener('click', onButtonScaleIncrease);
+  changeScale();
+  setupEffects();
 });
 
 const pristine = new Pristine(uploadForm, {

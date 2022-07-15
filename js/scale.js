@@ -31,20 +31,29 @@ const increaseScale = () => {
 
 const onButtonScaleDecrease = () => {
   const currentValue = decreaseScale();
-  scaleValue.setAttribute('value',`${currentValue  }%`);
+  scaleValue.value = `${currentValue  }%`;
   setScaleValue(currentValue);
 };
 
 const onButtonScaleIncrease = () => {
   const currentValue = increaseScale();
-  scaleValue.setAttribute('value',`${currentValue  }%`);
+  scaleValue.value = `${currentValue  }%`;
   setScaleValue(currentValue);
+};
+
+const changeScale = () => {
+  scaleControlSmaller.addEventListener('click', onButtonScaleDecrease);
+  scaleControlBigger.addEventListener('click', onButtonScaleIncrease);
 };
 
 const resetScale = ()=> {
   imagePreview.style.transform = '';
-  scaleValue.setAttribute('value', `${MAX_SCALE_VALUE}%`);
+  scaleValue.value = `${MAX_SCALE_VALUE}%`;
 };
 
+const removeScale = () => {
+  scaleControlSmaller.removeEventListener('click', onButtonScaleDecrease);
+  scaleControlBigger.removeEventListener('click', onButtonScaleIncrease);
+};
 
-export {resetScale, scaleControlSmaller, scaleControlBigger, onButtonScaleDecrease, onButtonScaleIncrease};
+export {resetScale, changeScale, removeScale};
