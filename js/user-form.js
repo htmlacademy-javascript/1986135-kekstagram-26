@@ -1,4 +1,6 @@
-import { IS_ESCAPE_KEY } from './util.js';
+import { isEscapeKey } from './util.js';
+import { resetScale, changeScale, removeScale } from './scale.js';
+import {setupEffects, destroyEffects} from './slider-effects.js';
 
 const RE = /^#[a-zA-ZА-Яа-яЁё0-9]{1,19}$/;
 const HASHTAG = {
@@ -20,6 +22,9 @@ const uploadImageClose = ()=> {
   uploadCancelButton.removeEventListener ('click', onUploadImgClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
   uploadForm.reset();
+  resetScale();
+  removeScale();
+  destroyEffects();
 };
 
 function onUploadImgClose () {
@@ -32,7 +37,7 @@ function onPopupEscKeydown (evt) {
   } else if(textDescription === document.activeElement) {
     evt.stopPropagation();
   } else {
-    if(IS_ESCAPE_KEY(evt)){
+    if(isEscapeKey(evt)){
       evt.preventDefault();
       onUploadImgClose();
     }
@@ -44,6 +49,8 @@ uploadFileInput.addEventListener('change', ()=> {
   body.classList.add('modal-open');
   uploadCancelButton.addEventListener('click', onUploadImgClose);
   document.addEventListener('keydown', onPopupEscKeydown);
+  changeScale();
+  setupEffects();
 });
 
 const pristine = new Pristine(uploadForm, {
@@ -71,10 +78,10 @@ pristine.addValidator(hashTags, (value)=> unifyHashtags(value).length <=  HASHTA
 pristine.addValidator(hashTags, (value)=>  isArrayUnique(unifyHashtags(value)), 'Хэштеги не должны повторяться, #ХэшТег и #хэштег считаются одним и тем же тегом');
 pristine.addValidator(textDescription, validateDescription, 'Длина комментария не может составлять больше 140 символов');
 
-const onUploadFormSubnmit = (evt)=> {
+const onUploadFormSubmit = (evt)=> {
   const isImgUploadFormValid =()=> pristine.validate();
   if (!isImgUploadFormValid()) {
     evt.preventDefault();
   }
 };
-uploadForm.addEventListener('submit', onUploadFormSubnmit);
+uploadForm.addEventListener('submit', onUploadFormSubmit);
