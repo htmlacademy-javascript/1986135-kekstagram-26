@@ -1,6 +1,8 @@
 import { isEscapeKey } from './util.js';
 import { resetScale, changeScale, removeScale } from './scale.js';
 import {setupEffects, destroyEffects} from './slider-effects.js';
+import { showMessage } from './popup-messages.js';
+import {sendFormData} from './api.js';
 
 const RE = /^#[a-zA-ZА-Яа-яЁё0-9]{1,19}$/;
 const HASHTAG = {
@@ -15,6 +17,7 @@ const uploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancelButton = document.querySelector('.img-upload__cancel');
 const hashTags = document.querySelector('[name = "hashtags"]');
 const textDescription = document.querySelector('[name = "description"]');
+const uploadSubmitButton = document.querySelector('.img-upload__submit');
 
 const uploadImageClose = ()=> {
   uploadOverlay.classList.add('hidden');
@@ -32,12 +35,14 @@ function onUploadImgClose () {
 }
 
 function onPopupEscKeydown (evt) {
+  // const errorElement = document.querySelector('.error');
+  // const successElement  = document.querySelector('.success');
   if(hashTags === document.activeElement) {
     evt.stopPropagation();
   } else if(textDescription === document.activeElement) {
     evt.stopPropagation();
   } else {
-    if(isEscapeKey(evt)){
+    if(isEscapeKey(evt)) {
       evt.preventDefault();
       onUploadImgClose();
     }
@@ -78,10 +83,36 @@ pristine.addValidator(hashTags, (value)=> unifyHashtags(value).length <=  HASHTA
 pristine.addValidator(hashTags, (value)=>  isArrayUnique(unifyHashtags(value)), 'Хэштеги не должны повторяться, #ХэшТег и #хэштег считаются одним и тем же тегом');
 pristine.addValidator(textDescription, validateDescription, 'Длина комментария не может составлять больше 140 символов');
 
-const onUploadFormSubmit = (evt)=> {
+const blockUploadSubmitButton = () => {
+  uploadSubmitButton.disabled = true;
+  uploadSubmitButton.textContent = 'Публикуем...';
+};
+
+const unblockUploadSubmitButton = () => {
+  uploadSubmitButton.disabled = false;
+  uploadSubmitButton.textContent = 'Опубликовать';
+};
+
+const onUploadFormSubmit = (evt) =>{
+  evt.preventDefault();
   const isImgUploadFormValid =()=> pristine.validate();
   if (!isImgUploadFormValid()) {
     evt.preventDefault();
+    blockUploadSubmitButton();
   }
+  blockUploadSubmitButton();
+  sendFormData(
+    ()=> {
+      showMessage('success');
+      unblockUploadSubmitButton();
+      uploadForm.reset();
+    },
+    ()=> {
+      showMessage('error');
+      unblockUploadSubmitButton();
+    },
+    new FormData(evt.target),
+  );
 };
+
 uploadForm.addEventListener('submit', onUploadFormSubmit);

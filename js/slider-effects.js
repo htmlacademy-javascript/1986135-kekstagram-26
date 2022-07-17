@@ -6,7 +6,7 @@ const sliderElement = document.querySelector('.effect-level__slider');
 
 const EFFECT_NONE = 'none';
 const EFFECTS_CONFIG = {
-  // NONE: '',
+  NONE : '',
   CHROME: {
     sliderConfig: {
       range: {

@@ -1,3 +1,5 @@
+const ALERT_SHOW_TIME = 6000;
+
 // Функция, возвращающая случ.число из диапазона включительно(из MDN)
 const getRandomFromRangeInclusive = (min, max) => {
   min = Math.ceil(min);
@@ -42,4 +44,26 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 
 const isEscapeKey = (evt) =>  evt.key === 'Escape';
 
-export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey};
+const isOutsideClick=(evt) => evt.target.matches('section');
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '50px';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '40px';
+  alertContainer.style.fontSize = '40px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = '#ccc492';
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert, isOutsideClick};
