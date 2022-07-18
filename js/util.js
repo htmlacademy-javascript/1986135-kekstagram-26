@@ -44,8 +44,6 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 
 const isEscapeKey = (evt) =>  evt.key === 'Escape';
 
-const isOutsideClick=(evt) => evt.target.matches('section');
-
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -66,4 +64,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert, isOutsideClick};
+export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert};
