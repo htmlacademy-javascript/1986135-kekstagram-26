@@ -1,24 +1,43 @@
-import { makePhotos } from './data.js';
+import { getPhotoData } from './api.js';
 import {openPreview} from './preview.js';
+import { showAlert } from './util.js';
+
+// import { showAlert } from './util.js';
 
 const pictures = document.querySelector('.pictures');
 const randomPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const groupPictures = makePhotos();
-const groupPicturesFragment = document.createDocumentFragment();
-groupPictures.forEach((photo) => {
-  const {comments, likes, url} = photo;
-  const pictureElement = randomPictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureElement.querySelector('.picture__comments').textContent = comments.length;
+const clearPictureList = () => {
+  pictures.innerhtml = '';
+};
 
-  groupPicturesFragment.appendChild(pictureElement);
+const createPicturesList = (pictureData) => {
+  const groupPicturesFragment = document.createDocumentFragment();
+  clearPictureList();
+  pictureData.forEach((photo) => {
+    const {comments, likes, url} = photo;
+    const pictureElement = randomPictureTemplate.cloneNode(true);
+    pictureElement.querySelector('.picture__img').src = url;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
+    pictureElement.querySelector('.picture__comments').textContent = comments.length;
 
-  pictureElement.addEventListener('click', ()=> {
-    openPreview(photo);
+    groupPicturesFragment.appendChild(pictureElement);
+
+    pictureElement.addEventListener('click', ()=> {
+      openPreview(photo);
+    });
+
   });
+  pictures.appendChild(groupPicturesFragment);
+};
 
-});
+const renderPictureList = (pictureData) => {
+  createPicturesList(pictureData);
+};
 
-pictures.appendChild(groupPicturesFragment);
+// const getPicturesList=()=> {
+getPhotoData((data)=> {
+  renderPictureList(data);
+},
+()=> showAlert('Не удалось загрузить фото с сервера'));
+
