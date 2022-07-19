@@ -64,4 +64,14 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert};
+const shuffleArray = (arr) => {
+  const copyArray = arr.slice(0, arr.length-1);
+  for (let i = copyArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copyArray[i], copyArray[j]] = [copyArray[j], copyArray[i]];
+  }
+  return copyArray;
+};
+
+export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert, shuffleArray};
+

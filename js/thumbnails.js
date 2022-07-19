@@ -1,11 +1,12 @@
 import { getPhotoData } from './api.js';
 import {openPreview} from './preview.js';
 import { showAlert } from './util.js';
-
-// import { showAlert } from './util.js';
+import {onFilterChange, setupFilters} from './filter-photos.js';
 
 const pictures = document.querySelector('.pictures');
 const randomPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const filtersContainer = document.querySelector('.img-filters');
+
 
 const clearPictureList = () => {
   pictures.innerhtml = '';
@@ -35,9 +36,13 @@ const renderPictureList = (pictureData) => {
   createPicturesList(pictureData);
 };
 
-// const getPicturesList=()=> {
 getPhotoData((data)=> {
   renderPictureList(data);
+  filtersContainer.classList.remove('img-filters--inactive');
+  setupFilters(()=>renderPictureList(data));
 },
 ()=> showAlert('Не удалось загрузить фото с сервера'));
+
+
+export {clearPictureList};
 
