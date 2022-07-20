@@ -6,3 +6,4 @@ import './slider-effects.js';
 import './scale.js';
 import './api.js';
 import './filter-photos.js';
+import './upload-image.js';

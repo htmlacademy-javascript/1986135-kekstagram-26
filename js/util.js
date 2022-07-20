@@ -18,10 +18,6 @@ const getRandomPositiveInteger = (a, b) => {
   return Math.floor(result);
 };
 
-//проверка длины строки
-// const checkStringLength = (string, maxStringLength) => string.length <= maxStringLength;
-// checkStringLength ();
-
 //создает уникальный массив чисел
 const getUniqueId = (numberOfDigits) => {
   const numbersUniqueId = [];
@@ -73,5 +69,13 @@ const shuffleArray = (arr) => {
   return copyArray;
 };
 
-export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert, shuffleArray};
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert, shuffleArray, debounce};
 

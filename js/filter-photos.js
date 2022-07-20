@@ -1,7 +1,8 @@
-import { shuffleArray } from './util.js';
-import { clearPictureList } from './thumbnails.js';
+import { shuffleArray, debounce } from './util.js';
+import { renderPictureList } from './thumbnails.js';
 
 const QUANTITY_RANDOM_PHOTOS = 10;
+const RERENDER_DELAY = 500;
 const filtersContainer = document.querySelector('.img-filters');
 
 const defaultFilter = (data) => data;
@@ -13,38 +14,36 @@ const commentsFilter = (data) => {
   return photosCopied.sort((a,b) => b.comments.length - a.comments.length);
 };
 
-const setFilter = (filter, data) => {
-  switch(filter) {
-    case 'filter-default':
-      defaultFilter(data);
-      break;
-    case 'filter-random':
-      randomFilter(data);
-      break;
-    case 'filter-discussed':
-      commentsFilter(data);
-      break;
-    default:
-      defaultFilter(data);
-  }
-};
+const setupFilters = (data) => {
+  const setFilter = debounce((filter) => {
+    switch(filter) {
+      case 'filter-default':
+        renderPictureList(defaultFilter(data));
+        break;
+      case 'filter-random':
+        renderPictureList(randomFilter(data));
+        break;
+      case 'filter-discussed':
+        renderPictureList(commentsFilter(data));
+        break;
+      default:
+        renderPictureList(defaultFilter(data));
+    }
+  }, RERENDER_DELAY);
 
-const onFilterChange = (evt) => {
-  const activeButton = filtersContainer.querySelector('.img-filters__button--active');
-  const target = evt.target;
-  if(target.className === 'img-filters__button') {
-    evt.preventDefault();
-    activeButton.classList.remove('img-filters__button--active');
-    target.classList.add('img-filters__button--active');
-  }
-  clearPictureList();
-  setFilter(target.id);
-};
 
-const setupFilters = (cb) => {
+  const onFilterChange = (evt) => {
+    const activeButton = filtersContainer.querySelector('.img-filters__button--active');
+    const target = evt.target;
+    if(target.className === 'img-filters__button') {
+      evt.preventDefault();
+      activeButton.classList.remove('img-filters__button--active');
+      target.classList.add('img-filters__button--active');
+    }
+    setFilter(target.id);
+  };
+
   filtersContainer.addEventListener('click', onFilterChange);
-  cb();
 };
 
-
-export { setupFilters,onFilterChange,commentsFilter, defaultFilter, randomFilter}
+export { setupFilters};
