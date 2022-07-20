@@ -19,6 +19,7 @@ const filterByComments = (data) => {
 };
 
 const setupFilters = (data) => {
+  filtersContainer.classList.remove('img-filters--inactive');
   const setFilter = debounce((filter) => {
     switch(filter) {
       case FILTERS.DEFAULT:

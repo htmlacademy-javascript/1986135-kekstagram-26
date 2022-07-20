@@ -5,7 +5,6 @@ import {setupFilters} from './filter-photos.js';
 
 const pictures = document.querySelector('.pictures');
 const randomPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const filtersContainer = document.querySelector('.img-filters');
 
 
 const clearPictureList = () => {
@@ -38,9 +37,7 @@ const renderPictureList = (pictureData) => {
 
 getPhotoData((data)=> {
   renderPictureList(data);
-  filtersContainer.classList.remove('img-filters--inactive');
   setupFilters(data);
-
 },
 ()=> showAlert('Не удалось загрузить фото с сервера'));
 
