@@ -10,6 +10,8 @@ const HASHTAG = {
   MIN_SIZE: 2,
   AMOUNT: 5
 };
+const ERROR_MESSAGE = 'error';
+const SUCCESS_MESSAGE = 'success';
 const MAX_TEXT_SYMBOLS = 140;
 const uploadForm = document.querySelector('.img-upload__form');
 const body = document.querySelector('body');
@@ -105,13 +107,13 @@ const onUploadFormSubmit = (evt) =>{
   sendFormData(
     ()=> {
       uploadImageClose();
-      showMessage('success');
+      showMessage(SUCCESS_MESSAGE);
       unblockUploadSubmitButton();
       uploadForm.reset();
       pristine.reset();
     },
     ()=> {
-      showMessage('error');
+      showMessage(ERROR_MESSAGE);
       unblockUploadSubmitButton();
     },
     new FormData(evt.target),

@@ -3,13 +3,17 @@ import { renderPictureList } from './thumbnails.js';
 
 const QUANTITY_RANDOM_PHOTOS = 10;
 const RERENDER_DELAY = 500;
+const FILTERS ={
+  DEFAULT : 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};
+
 const filtersContainer = document.querySelector('.img-filters');
 
-const defaultFilter = (data) => data;
+const filterByRandom = (data) => shuffleArray(data).slice(0, QUANTITY_RANDOM_PHOTOS);
 
-const randomFilter = (data) => shuffleArray(data).slice(0, QUANTITY_RANDOM_PHOTOS);
-
-const commentsFilter = (data) => {
+const filterByComments = (data) => {
   const photosCopied = data.slice(0, data.length-1);
   return photosCopied.sort((a,b) => b.comments.length - a.comments.length);
 };
@@ -17,17 +21,15 @@ const commentsFilter = (data) => {
 const setupFilters = (data) => {
   const setFilter = debounce((filter) => {
     switch(filter) {
-      case 'filter-default':
-        renderPictureList(defaultFilter(data));
+      case FILTERS.DEFAULT:
+        renderPictureList(data);
         break;
-      case 'filter-random':
-        renderPictureList(randomFilter(data));
+      case FILTERS.RANDOM:
+        renderPictureList(filterByRandom(data));
         break;
-      case 'filter-discussed':
-        renderPictureList(commentsFilter(data));
+      case FILTERS.DISCUSSED:
+        renderPictureList(filterByComments(data));
         break;
-      default:
-        renderPictureList(defaultFilter(data));
     }
   }, RERENDER_DELAY);
 

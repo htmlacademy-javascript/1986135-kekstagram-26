@@ -1,44 +1,7 @@
 const ALERT_SHOW_TIME = 6000;
+const ESCAPE = 'Escape';
 
-// Функция, возвращающая случ.число из диапазона включительно(из MDN)
-const getRandomFromRangeInclusive = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  if(min < 0, max < 0){
-    throw new RangeError('Параметр должен быть больше или равным нулю');
-  }
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-getRandomFromRangeInclusive();
-
-const getRandomPositiveInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
-//создает уникальный массив чисел
-const getUniqueId = (numberOfDigits) => {
-  const numbersUniqueId = [];
-  const getNumber = ()=>{
-    const number = getRandomPositiveInteger(1,numberOfDigits);
-    if (numbersUniqueId.includes(number)){
-      getNumber();
-    } else {
-      numbersUniqueId.push(number);
-    }
-  };
-  for (let i = 0; i < numberOfDigits; i++){
-    getNumber();
-  }
-  return numbersUniqueId;
-};
-
-//случайный элемент из массива
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-
-const isEscapeKey = (evt) =>  evt.key === 'Escape';
+const isEscapeKey = (evt) =>  evt.key === ESCAPE;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -77,5 +40,5 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export {getRandomPositiveInteger, getRandomArrayElement, getUniqueId, isEscapeKey, showAlert, shuffleArray, debounce};
+export { isEscapeKey, showAlert, shuffleArray, debounce};
 
