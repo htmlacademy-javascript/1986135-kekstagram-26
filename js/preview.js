@@ -28,16 +28,16 @@ const renderComments = (comments) => {
     commentElement.querySelector('img').alt = name;
     commentElement.querySelector('.social__text').textContent = message;
     previewComments.append(commentElement);
-    commentsCounter += comments.length;
-    showCommentsLoaded(commentsCounter);
   });
+  commentsCounter += comments.length;
+  showCommentsLoaded(commentsCounter);
 };
 
 const hideCommentsLoaderButton = () => {
   commentsLoaderButton.classList.add('hidden');
 };
 
-const onCommentsLoadMoreButton = ()=> {
+const onCommentsLoadMoreButtonClick = ()=> {
   if(commentsToRender.length <= COMMENTS_TO_SHOW) {
     hideCommentsLoaderButton();
   }
@@ -46,7 +46,7 @@ const onCommentsLoadMoreButton = ()=> {
 
 const showCommentsLoaderButton = ()=>{
   commentsLoaderButton.classList.remove('hidden');
-  commentsLoaderButton.addEventListener('click', onCommentsLoadMoreButton);
+  commentsLoaderButton.addEventListener('click', onCommentsLoadMoreButtonClick);
 };
 
 const showCommentsBlock = () => {
@@ -75,6 +75,7 @@ const closePreview = () => {
   preview.classList.add('hidden');
   body.classList.remove('modal-open');
   commentsCounter = 0;
+  commentsLoaderButton.removeEventListener('click', onCommentsLoadMoreButtonClick);
   previewCloseButton.removeEventListener('click', onPreviewClose);
   document.removeEventListener('keydown', onPopupEscKeydown);
 };
