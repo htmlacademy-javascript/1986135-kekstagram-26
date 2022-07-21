@@ -1,9 +1,3 @@
-const effectsList = document.querySelector('.effects__list');
-const sliderContainer = document.querySelector('.effect-level');
-const imagePreview = document.querySelector('.img-upload__preview').querySelector('img');
-const valueElement = document.querySelector('.effect-level__value');
-const sliderElement = document.querySelector('.effect-level__slider');
-
 const EFFECT_NONE = 'none';
 const EFFECTS_CONFIG = {
   NONE : '',
@@ -69,6 +63,12 @@ const EFFECTS_CONFIG = {
   },
 };
 
+const effectsList = document.querySelector('.effects__list');
+const sliderContainer = document.querySelector('.effect-level');
+const imagePreview = document.querySelector('.img-upload__preview').querySelector('img');
+const valueElement = document.querySelector('.effect-level__value');
+const sliderElement = document.querySelector('.effect-level__slider');
+
 const setEffectClass = (className) => {
   imagePreview.classList = '';
   imagePreview.classList.add(className);
@@ -91,7 +91,7 @@ const resetEffectSetting = () => {
   sliderContainer.classList.add('hidden');
 };
 
-const onChangeEffectsList = (evt) => {
+const onEffectListChange = (evt) => {
   const target = evt.target;
   if (target && target.value === EFFECT_NONE) {
     resetEffectSetting();
@@ -106,7 +106,7 @@ const onChangeEffectsList = (evt) => {
 };
 
 const setupEffects = () => {
-  effectsList.addEventListener('change', onChangeEffectsList);
+  effectsList.addEventListener('change', onEffectListChange);
   noUiSlider.create(sliderElement, EFFECTS_CONFIG.CHROME.sliderConfig);
 
   sliderElement.noUiSlider.on('update', (unencoded, handle) => {

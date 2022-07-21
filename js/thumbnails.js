@@ -7,7 +7,6 @@ const pictures = document.querySelector('.pictures');
 const randomPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const filtersContainer = document.querySelector('.img-filters');
 
-
 const clearPictureList = () => {
   pictures.querySelectorAll('.picture').forEach((item)=> item.remove());
 };
@@ -34,13 +33,13 @@ const createPicturesList = (pictureData) => {
 
 const renderPictureList = (pictureData) => {
   createPicturesList(pictureData);
+  filtersContainer.classList.remove('img-filters--inactive');
+
 };
 
 getPhotoData((data)=> {
   renderPictureList(data);
-  filtersContainer.classList.remove('img-filters--inactive');
   setupFilters(data);
-
 },
 ()=> showAlert('Не удалось загрузить фото с сервера'));
 
