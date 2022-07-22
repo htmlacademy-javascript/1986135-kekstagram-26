@@ -43,14 +43,13 @@ function onUploadImgClose () {
   uploadImageClose();
 }
 
+
 function onPopupEscKeydown (evt) {
   const errorElement = document.querySelector('.error');
   if (!isEscapeKey(evt) || errorElement) {
     return;
   }
-  if(hashTags === document.activeElement) {
-    evt.stopPropagation();
-  } else if(textDescription === document.activeElement) {
+  if(hashTags === document.activeElement || textDescription === document.activeElement) {
     evt.stopPropagation();
   } else {
     if(isEscapeKey(evt)) {
@@ -80,21 +79,17 @@ const isArrayUnique = (array)=> new Set(array).size === array.length;
 
 const validateDescription = (value) => value.length <= MAX_TEXT_SYMBOLS;
 
-pristine.addValidator(hashTags, (value)=> unifyHashtags(value).every((elem) => elem.startsWith('#')), 'Хэштег должен начинаться с решетки#');
-pristine.addValidator(hashTags, (value)=> unifyHashtags(value).every((elem) => RE.test(elem)), 'Хэштег может состоять только из букв и цифр без пробелов, специальных символов и знаков пунктуации. Хэштеги должны разделяться пробелами');
-pristine.addValidator(hashTags, (value) => unifyHashtags(value).every((elem) => elem.length >= HASHTAG.MIN_SIZE), 'Минимальное количество символов - 2, максимальное - 20, включая #');
-pristine.addValidator(hashTags, (value) =>  unifyHashtags(value).every((elem) => elem.length <= HASHTAG.MAX_SIZE), 'Максимальное количество символов - 20, включая #');
-pristine.addValidator(hashTags, (value)=> unifyHashtags(value).length <=  HASHTAG.AMOUNT, 'Можно добавить не более 5 хэштегов');
+pristine.addValidator(hashTags, (value)=> unifyHashtags(value).every((elem) => elem.startsWith('#')), 'Хэштег должен начинаться с решетки#', 6, false);
+pristine.addValidator(hashTags, (value)=> unifyHashtags(value).every((elem) => RE.test(elem)), 'Хэштег может состоять только из букв и цифр без пробелов, специальных символов и знаков пунктуации. Хэштеги должны разделяться пробелами', 4, false);
+pristine.addValidator(hashTags, (value) => unifyHashtags(value).every((elem) => elem.length >= HASHTAG.MIN_SIZE), 'Минимальное количество символов - 2, максимальное - 20, включая #', 5, false);
+pristine.addValidator(hashTags, (value) =>  unifyHashtags(value).every((elem) => elem.length <= HASHTAG.MAX_SIZE), 'Максимальное количество символов - 20, включая #', 4, false);
+pristine.addValidator(hashTags, (value)=> unifyHashtags(value).length <=  HASHTAG.AMOUNT, 'Можно добавить не более 5 хэштегов', 2, false);
 
-pristine.addValidator(hashTags, (value)=>  isArrayUnique(unifyHashtags(value)), 'Хэштеги не должны повторяться, #ХэшТег и #хэштег считаются одним и тем же тегом');
-pristine.addValidator(textDescription, validateDescription, 'Длина комментария не может составлять больше 140 символов');
+pristine.addValidator(hashTags, (value)=>  isArrayUnique(unifyHashtags(value)), 'Хэштеги не должны повторяться, #ХэшТег и #хэштег считаются одним и тем же тегом', 3, false );
+pristine.addValidator(textDescription, validateDescription, 'Длина комментария не может составлять больше 140 символов', 3, false);
 
-const blockUploadSubmitButton = () => {
-  uploadSubmitButton.disabled = true;
-};
-
-const unblockUploadSubmitButton = () => {
-  uploadSubmitButton.disabled = false;
+const blockUploadSubmitButton = (value) => {
+  uploadSubmitButton.disabled = value;
 };
 
 const onUploadFormSubmit = (evt) =>{
@@ -103,18 +98,18 @@ const onUploadFormSubmit = (evt) =>{
   if (!isImgUploadFormValid()) {
     return;
   }
-  blockUploadSubmitButton();
+  blockUploadSubmitButton(true);
   sendFormData(
     ()=> {
       uploadImageClose();
       showMessage(SUCCESS_MESSAGE);
-      unblockUploadSubmitButton();
+      blockUploadSubmitButton(false);
       uploadForm.reset();
       pristine.reset();
     },
     ()=> {
       showMessage(ERROR_MESSAGE);
-      unblockUploadSubmitButton();
+      blockUploadSubmitButton(false);
     },
     new FormData(evt.target),
   );

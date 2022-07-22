@@ -8,37 +8,23 @@ const scaleControlBigger = scaleContainer.querySelector('.scale__control--bigger
 const scaleValue = scaleContainer.querySelector('.scale__control--value');
 const imagePreview = document.querySelector('.img-upload__preview').querySelector('img');
 
-const setScaleValue = (currentValue) => {
-  const newValue = currentValue /100;
-  imagePreview.style.transform = `scale(${newValue })`;
-};
-
-const decreaseScale = () => {
-  let currentValue = parseInt(scaleValue.value, 10);
-  if (currentValue > MIN_SCALE_VALUE) {
-    currentValue = currentValue - SCALE_STEP;
+const setScaleValue = (currentValue, step, canChange) => {
+  if (!canChange) {
+    return;
   }
-  return currentValue;
-};
-
-const increaseScale = () => {
-  let currentValue = parseInt(scaleValue.value, 10);
-  if (currentValue < MAX_SCALE_VALUE) {
-    currentValue = currentValue + SCALE_STEP;
-  }
-  return currentValue;
+  currentValue = currentValue + step;
+  scaleValue.value = `${currentValue}%`;
+  imagePreview.style.transform = `scale(${currentValue / 100})`;
 };
 
 const onButtonScaleDecrease = () => {
-  const currentValue = decreaseScale();
-  scaleValue.value = `${currentValue  }%`;
-  setScaleValue(currentValue);
+  const currentValue = parseInt(scaleValue.value, 10);
+  setScaleValue(currentValue, -SCALE_STEP, currentValue > MIN_SCALE_VALUE);
 };
 
 const onButtonScaleIncrease = () => {
-  const currentValue = increaseScale();
-  scaleValue.value = `${currentValue  }%`;
-  setScaleValue(currentValue);
+  const currentValue = parseInt(scaleValue.value, 10);
+  setScaleValue(currentValue, SCALE_STEP, currentValue < MAX_SCALE_VALUE);
 };
 
 const changeScale = () => {

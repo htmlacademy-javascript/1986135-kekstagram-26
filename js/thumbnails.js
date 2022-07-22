@@ -22,9 +22,10 @@ const createPicturesList = (pictureData) => {
 
     groupPicturesFragment.appendChild(pictureElement);
 
-    pictureElement.addEventListener('click', ()=> {
+    const onOpenPreviewClick = () => {
       openPreview(photo);
-    });
+    };
+    pictureElement.addEventListener('click', onOpenPreviewClick);
 
   });
   clearPictureList();
