@@ -51,11 +51,10 @@ function onPopupEscKeydown (evt) {
   }
   if(hashTags === document.activeElement || textDescription === document.activeElement) {
     evt.stopPropagation();
-  } else {
-    if(isEscapeKey(evt)) {
-      evt.preventDefault();
-      onUploadImgClose();
-    }
+  }
+  if(isEscapeKey(evt)) {
+    evt.preventDefault();
+    onUploadImgClose();
   }
 }
 
